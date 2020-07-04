@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
-import Axios from 'axios';
-import { ENDPOINT } from '../../constants';
 
 
 const LandingPage = (props:any) => {
 
   useEffect(() => {
     if(props.user.enteredChat) props.history.push('/chat')
-  }, [props.user.enteredChat])
+  }, [props.user.enteredChat, props.history])
   
   const handleSubmit = (event:any)=> {
     event.preventDefault();

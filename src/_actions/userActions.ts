@@ -8,6 +8,20 @@ export const onChangeNameInput = (name:string) => {
   }
 }
 
+export const giveUserId = (id:string) => {
+  return {
+    type: 'USER_ADD_ID',
+    payload: id
+  }
+}
+
+export const userLeaveChat = (id:string) => {
+  return {
+    type: 'USER_LEAVE_CHAT',
+  }
+}
+
+
 export const registerName = (name:string) => {
   return  (dispatch: (arg0: { type: string; payload: any; }) => void) => {
     Axios
@@ -18,7 +32,9 @@ export const registerName = (name:string) => {
         alert(res.data.error)
         return;
       } 
-      dispatch({type: 'REGISTER_USER', payload: res.data.name})
+      dispatch({type: 'USER_REGISTERED', payload: res.data.name})
       });
   };
-}; 
+};
+
+

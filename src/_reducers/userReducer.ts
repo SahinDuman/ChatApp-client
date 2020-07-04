@@ -1,11 +1,13 @@
 interface User {
   name: string,
+  id: string,
   error: boolean | string,
   enteredChat: boolean
 }
 
 const initialState:User = {
   name: '',
+  id:'',
   error: false,
   enteredChat: false
 }
@@ -20,7 +22,7 @@ const userReducer = (state:User = initialState , action:any) => {
         enteredChat: false
       }
       break;
-    case 'REGISTER_USER':
+    case 'USER_REGISTERED':
       state = {
         ...state,
         name: action.payload,
@@ -35,7 +37,19 @@ const userReducer = (state:User = initialState , action:any) => {
         enteredChat: false
       }
       break;
-      
+    case 'USER_ADD_ID':
+      state = {
+        ...state,
+        id: action.payload,
+        error: false,
+        enteredChat: true
+      }
+      break;
+      case 'USER_LEAVE_CHAT':
+        state = {
+          ...initialState,
+        }
+        break;
   }
   return state;
 }
