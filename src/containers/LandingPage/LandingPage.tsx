@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import Axios from 'axios';
+import { ENDPOINT } from '../../constants';
 
 
 const LandingPage = (props:any) => {
@@ -9,7 +11,6 @@ const LandingPage = (props:any) => {
   
   const handleSubmit = (event:any)=> {
     event.preventDefault();
-
     props.registerName(props.user.name)
   }
 

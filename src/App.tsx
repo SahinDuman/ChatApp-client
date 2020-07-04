@@ -21,18 +21,18 @@ const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
     },
     onChangeNameInput: (value:string) => {
       dispatch(onChangeNameInput(value))
-  }
+  },
+
   }
 }
 
 const App = (props:any) => {
   const {user, registerName, onChangeNameInput} = props;
   
-
   return (
     <Router>
-      <Route path="/" exact render={(props:any) => <LandingPage {...props} user={user} registerName={registerName} onChangeNameInput={onChangeNameInput} />} />
-      <Route path="/chat" component={ChatRoom} />
+      <Route path="/" exact render={(props:any) => <LandingPage {...props} user={user} registerName={registerName} onChangeNameInput={onChangeNameInput}  />} />
+      <Route path="/chat" render={(props:any) => <ChatRoom {...props} user={user} />} />
     </Router>
   );
 }

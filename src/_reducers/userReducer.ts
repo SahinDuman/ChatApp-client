@@ -4,7 +4,7 @@ interface User {
   enteredChat: boolean
 }
 
-const initialState = {
+const initialState:User = {
   name: '',
   error: false,
   enteredChat: false
@@ -15,20 +15,24 @@ const userReducer = (state:User = initialState , action:any) => {
     case 'UPDATE_NAME_INPUT':
       state = {
         ...state,
-        name: action.payload
+        name: action.payload,
+        error: false,
+        enteredChat: false
       }
       break;
     case 'REGISTER_USER':
       state = {
         ...state,
         name: action.payload,
+        error: false,
         enteredChat: true
       }
       break;
     case 'USER_ALREADY_EXISTS':
       state = {
         ...state,
-        error: action.payload
+        error: action.payload,
+        enteredChat: false
       }
       break;
       
