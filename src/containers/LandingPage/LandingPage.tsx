@@ -2,14 +2,15 @@ import React, { useEffect } from 'react';
 
 
 const LandingPage = (props:any) => {
+  const {user, registerName, onChangeNameInput, history} = props;
 
   useEffect(() => {
-    if(props.user.enteredChat) props.history.push('/chat')
-  }, [props.user.enteredChat, props.history])
+    if(user.enteredChat) history.push('/chat')
+  }, [user.enteredChat, history])
   
   const handleSubmit = (event:any)=> {
     event.preventDefault();
-    props.registerName(props.user.name)
+    registerName(user.name)
   }
 
 
@@ -25,8 +26,8 @@ const LandingPage = (props:any) => {
         <input 
           type="text" 
           placeholder="Enter nickname..." 
-          value={props.user.name}
-          onChange={event => props.onChangeNameInput(event.target.value)}
+          value={user.name}
+          onChange={event => onChangeNameInput(event.target.value)}
         />
       </div>
 

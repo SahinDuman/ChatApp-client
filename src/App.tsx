@@ -7,10 +7,9 @@ import { registerName, onChangeNameInput, giveUserId, userLeaveChat } from './_a
 import LandingPage from './containers/LandingPage/LandingPage';
 import ChatRoom from './containers/ChatRoom/ChatRoom';
 
-const mapStateToProps = (state: { user: string; }) => {
+const mapStateToProps = (state: { user: any }) => {
   return {
     user: state.user,
-    state
   }
 }
 
