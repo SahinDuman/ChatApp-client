@@ -7,12 +7,12 @@ const LandingPage = (props:any) => {
   const [infobox, setInfobox] = useState('');
 
   useEffect(() => {
-    if(user.error) {
-      setInfobox(user.error)
+    if(user.infoBox) {
+      setInfobox(user.infoBox)
     } else {
       setInfobox('')
     }
-  }, [user.error])
+  }, [user.infoBox])
 
   useEffect(() => {
     if(user.enteredChat) history.push('/chat')
@@ -55,7 +55,7 @@ const LandingPage = (props:any) => {
           </button>
         </div>
 
-        <div className="landingpage__infobox">
+        <div className={user.infoBoxClass}>
           <p>{infobox}</p>
         </div>
       </div>

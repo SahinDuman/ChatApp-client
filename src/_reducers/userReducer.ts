@@ -1,14 +1,16 @@
 interface User {
   name: string,
   id: string,
-  error: boolean | string,
+  infoBox: boolean | string,
+  infoBoxClass: string,
   enteredChat: boolean
 }
 
 const initialState:User = {
   name: '',
   id:'',
-  error: false,
+  infoBox: false,
+  infoBoxClass: 'red', 
   enteredChat: false
 }
 
@@ -18,7 +20,7 @@ const userReducer = (state:User = initialState , action:any) => {
       state = {
         ...state,
         name: action.payload,
-        error: false,
+        infoBox: false,
         enteredChat: false
       }
       break;
@@ -26,14 +28,15 @@ const userReducer = (state:User = initialState , action:any) => {
       state = {
         ...state,
         name: action.payload,
-        error: false,
+        infoBox: false,
         enteredChat: true
       }
       break;
     case 'USER_ALREADY_EXISTS':
       state = {
         ...state,
-        error: action.payload,
+        infoBox: action.payload,
+        infoBoxClass: 'red',
         enteredChat: false
       }
       break;
@@ -41,13 +44,29 @@ const userReducer = (state:User = initialState , action:any) => {
       state = {
         ...state,
         id: action.payload,
-        error: false,
+        infoBox: false,
         enteredChat: true
       }
       break;
       case 'USER_LEAVE_CHAT':
         state = {
           ...initialState,
+          infoBox: action.payload,
+          infoBoxClass: 'white'
+        }
+        break;
+      case 'USER_DISCONNECTED':
+        state = {
+          ...initialState,
+          infoBox: action.payload,
+          infoBoxClass: 'red'
+        }
+        break;
+      case 'USER_COULD_NOT_CONNECT':
+        state = {
+          ...initialState,
+          infoBox: action.payload,
+          infoBoxClass: 'red'
         }
         break;
   }

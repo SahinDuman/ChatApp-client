@@ -15,9 +15,21 @@ export const giveUserId = (id:string) => {
   }
 }
 
-export const userLeaveChat = (id:string) => {
-  return {
-    type: 'USER_LEAVE_CHAT',
+export const userLeaveChat = (reason:string) => {
+  if(reason) {
+    return {
+      type: 'USER_LEAVE_CHAT',
+      payload: reason
+    }
+  }
+}
+
+export const userDisconnected = (reason:string) => {
+  if(reason) {
+    return {
+      type: 'USER_DISCONNECTED',
+      payload: reason
+    }
   }
 }
 
@@ -32,7 +44,8 @@ export const registerName = (name:string) => {
         return;
       } 
       dispatch({type: 'USER_REGISTERED', payload: res.data.name})
-      });
+      })
+      .catch(err => {dispatch({type:'USER_DISCONNECTED' , payload: 'Sorry, could not connect to server'})})
   };
 };
 

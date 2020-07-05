@@ -45,5 +45,6 @@
 }
 
 .landingpage__infobox {
+  background-color: red;
   color: var(--red);
 }

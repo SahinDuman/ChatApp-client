@@ -37,21 +37,30 @@ const mapDispatchToProps = (dispatch: any) => {
 let socket: SocketIOClient.Socket;
 
 const ChatRoom = (props:any) => {
-const {
-  user,
-  chat,
-  giveUserId,
-  userLeaveChat,
-  history, 
-  onChangeMessageInput,
-  addMessageToList,
-  clearCurrentMessage,
-  clearAllMessages
-} = props;
+  const {
+    user,
+    chat,
+    giveUserId,
+    userLeaveChat,
+    userDisconnected,
+    history, 
+    onChangeMessageInput,
+    addMessageToList,
+    clearCurrentMessage,
+    clearAllMessages
+  } = props;
 
-  useEffect(() => {
-    if(!user.enteredChat) history.push('/')
-  }, [user.enteredChat])
+  let admin = {
+    name: '',
+  };
+
+  let clientDisconnect:boolean = false;
+
+  let disconnectBotMessage:string = '';
+  let disconnectUserInfo: string | null = null;
+
+
+  useEffect(() => { if(!user.enteredChat) history.push('/') }, [user.enteredChat]);
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -65,6 +74,9 @@ const {
 
     socket.on('adminMessage', (adminMessage: any) => {
       const {user, name, message, role } = adminMessage
+      admin = name;
+
+      console.log('ADMIN', adminMessage)
       if (user) giveUserId(user.id);
       addMessageToList({name, message, role})
     });
@@ -76,30 +88,51 @@ const {
     });
  
 
-    socket.on('leave_chat', () => {
+    socket.on('leave_chat', (message: any) => {
+      console.log('LEAVE', message);
+      clientDisconnect = true;
       clearAllMessages();
-      userLeaveChat();
-    })
+      userLeaveChat(message.message);
+    });
 
-  /*   socket.on('disconnect', (message:any) => {
-      console.log(message);
-    })
-    */
+    socket.on('inactive',(message: any) => {
+      console.log('INACTIVE', message);
+      clientDisconnect = true;
+      userDisconnected(message.message);
+    });
+
+     socket.on('disconnect', (message:any) => {
+      console.log('DISCONNECT', message);
+
+      if(!clientDisconnect) {
+        userDisconnected('Lost connection');
+        addMessageToList({name: admin, message: `${user.name} left the chat, connection lost`, role: 'admin'})
+      }
+    });
+
+    return (() => {
+      socket.close();
+      clearAllMessages();
+    });
   }, []);
+  
 
   const onClickDisconnectHandler = (event:any) => {
-    socket.emit('leave_chat', { user }, (error: any) => {
-      if (error) {
-        alert(error);
-        return;
-      }
-
-    });
+    if(socket) {
+      socket.emit('leave_chat', { user }, (error: any) => {
+        if (error) {
+          alert(error);
+          return;
+        }
+      });
+    }
   }
 
   const submitMessageHandler = (event:any) => {
     event.preventDefault();
-    socket.emit('message', { name: user.name, message: chat.currentMessage})
+    if(socket) {
+      socket.emit('message', { name: user.name, message: chat.currentMessage})
+    }
   }
 
   return (

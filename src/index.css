@@ -66,3 +66,13 @@ button {
   outline: none;
   cursor: pointer;
 }
+
+/* global classes */
+
+.red {
+  color: var(--red);
+}
+
+.white {
+  color: var(--text-white)
+}
