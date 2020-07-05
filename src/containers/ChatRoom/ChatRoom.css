@@ -1,0 +1,6 @@
+.chatroom__container {
+  display: flex;
+  flex-direction: column;
+  flex-flow: column;
+  height: 100vh;
+}

@@ -2,9 +2,13 @@ import React, {  useEffect } from "react";
 import io from "socket.io-client";
 import {connect} from 'react-redux'
 
-import { onChangeMessageInput, clearCurrentMessage, addMessageToList } from '../../_actions/chatActions';
-
+import { onChangeMessageInput, clearCurrentMessage, addMessageToList, clearAllMessages } from '../../_actions/chatActions';
 import { ENDPOINT } from '../../constants';
+
+import ChatHeader from "../../components/ChatHeader/ChatHeader";
+import Messages from "../../components/Messages/Messages";
+import MessageInput from "../../components/MessageInput/MessageInput";
+import './ChatRoom.css';
 
 
 const mapStateToProps = (state: { chat: any; }) => {
@@ -23,6 +27,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     addMessageToList: (message:any) => {
       dispatch(addMessageToList(message))
+    },
+    clearAllMessages: () => {
+      dispatch(clearAllMessages());
     }
   }
 }
@@ -38,10 +45,10 @@ const {
   history, 
   onChangeMessageInput,
   addMessageToList,
-  clearCurrentMessage
+  clearCurrentMessage,
+  clearAllMessages
 } = props;
 
-console.log('CHAT', chat);
   useEffect(() => {
     if(!user.enteredChat) history.push('/')
   }, [user.enteredChat])
@@ -65,11 +72,12 @@ console.log('CHAT', chat);
     socket.on('message', (message: any) => {
       console.log('message:::', message);
       addMessageToList(message)
-      if(message.role === 'client') clearCurrentMessage();
+      if(message.name === user.name) clearCurrentMessage();
     });
  
 
     socket.on('leave_chat', () => {
+      clearAllMessages();
       userLeaveChat();
     })
 
@@ -89,26 +97,26 @@ console.log('CHAT', chat);
     });
   }
 
-  const submitMessageHandler = () => {
-    console.log('SUBMIT MESSAGE', chat, user);
-    socket.emit('message', { name: user.name, message: chat.currentMessage })
+  const submitMessageHandler = (event:any) => {
+    event.preventDefault();
+    socket.emit('message', { name: user.name, message: chat.currentMessage})
   }
 
   return (
-    <div>
-      <h1>Hello from chatroom</h1>
-      <button onClick={onClickDisconnectHandler}>Leave chat</button>
-      <div>
-        Messages here
-      </div>
+    <div className="chatroom__container">
+      <ChatHeader 
+        name={user.name} 
+        room="Narnia Chat" 
+        onClickDisconnectHandler={onClickDisconnectHandler} 
+      />
 
-      <input 
-      type="text" 
-      onKeyPress={event => event.key === 'Enter' && submitMessageHandler()}
-      onChange={event => onChangeMessageInput(event.target.value)}
-      value={chat.message}
-       /> 
-      <button onClick={submitMessageHandler}>Send</button>
+      <Messages messages={chat.allMessages} />
+      
+      <MessageInput 
+        chat={chat} 
+        onChangeMessageInput={onChangeMessageInput} 
+        submitMessageHandler={submitMessageHandler} 
+      />
     </div>
   );
 }

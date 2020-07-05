@@ -1,0 +1,21 @@
+.chatheader__container {
+  font-size: 0.8em;
+  display: flex;
+  justify-content: space-between;
+  padding: 1em;
+  width: 100%;
+  background-color: var(--main-app-color);
+}
+
+.chatheader__header {
+  width: 80%;
+}
+
+.chatheader__button {
+  width: 10%;
+  min-width: 60px;
+  background-color: rgba(248, 36, 29, 0.2);
+  border: 2px solid var(--red);
+  color: var(--text-white);
+  padding: 0;
+}

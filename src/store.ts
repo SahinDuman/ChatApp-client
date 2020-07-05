@@ -5,7 +5,7 @@ import user from './_reducers/userReducer';
 import chat from './_reducers/chatReducer';
 
 const store = createStore(
-  combineReducers({user, chat}),
+  combineReducers({ user, chat}),
   {},
   applyMiddleware(logger, thunk)
 )

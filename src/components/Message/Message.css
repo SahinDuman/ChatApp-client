@@ -1,0 +1,58 @@
+.message__container {
+  width: 100%;
+  display: flex;
+}
+
+.message__box {
+  background-color: var(--bg-color-dark-2);
+  border-radius: 5px;
+  padding: 0.4em 1em;
+  margin: 0.5em 1em;
+  color: var(--text-white);
+  max-width: 80%;
+}
+
+.message__message {
+  width: 100%;
+  font-size: 1.1em;
+  word-wrap: break-word;
+}
+
+.message__name {
+  font-weight: bolder;
+  font-size: 0.9em;
+  margin-bottom: 0.5em;
+  padding: 0.5em 0;
+  border-bottom: 1px solid rgba(255,255,255, 0.1);
+}
+
+.client {
+  justify-content: flex-end;
+}
+
+.client .message__name {
+  display: none;
+}
+
+.client .message__box {
+  background-color: var(--main-app-color);
+}
+
+.admin .message__box {
+  background-color: transparent;
+  max-width: 100%;
+  width: 100%;
+}
+
+.admin .message__name {
+  color: var(--admin-color);
+  font-size: 0.7em;
+}
+
+.admin .message__message {
+  font-style: italic;
+  font-size: 0.7em;
+  text-align: center;
+  opacity: 0.7;
+}
+

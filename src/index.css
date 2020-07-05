@@ -1,1 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
+:root {
+  --bg-color-dark-1: #222831;
+  --bg-color-dark-2: #2b3a52;
+  --bg-color-dark-3: #2e3746;
+  --main-app-color: #1d6df8;
+  --admin-color: #00aa55;
+  --text-white: #eeeeee;
+  --text-black: #222831;
+  --text-gray: #536277;
+  --red:  #f8241d;
+  ;
+}
+
+/* BASIC RESET */
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+
+/*base styling*/
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: var(--bg-color-dark-1);
+  color: var(--text-white);
+}
+
+label {
+  display: block;
+  font-size: 0.7em;
+}
+
+input {
+  color: var(--text-white);
+  padding: 0.8rem;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  border-radius: 3px;
+}
+
+input::placeholder {
+  color: var(--text-white);
+  opacity: 0.6;
+}
+
+button {
+  padding: 1em;
+  border: none;
+  border-radius: 3px;
+  font-weight: bolder;
+  font-size: 1em;
+  outline: none;
+  cursor: pointer;
+}

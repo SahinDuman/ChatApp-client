@@ -2,14 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import {connect} from 'react-redux'
 
-
 import { registerName, onChangeNameInput, giveUserId, userLeaveChat } from './_actions/userActions';
 import LandingPage from './containers/LandingPage/LandingPage';
 import ChatRoom from './containers/ChatRoom/ChatRoom';
 
-const mapStateToProps = (state: { user: any }) => {
+const mapStateToProps = (state: { user: any, app:any }) => {
   return {
     user: state.user,
+    app: state.app
   }
 }
 
@@ -31,7 +31,13 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 const App = (props:any) => {
-  const {user, registerName, onChangeNameInput, giveUserId, userLeaveChat} = props;
+  const {
+    user, 
+    registerName, 
+    onChangeNameInput, 
+    giveUserId, 
+    userLeaveChat, 
+  } = props;
   
   return (
     <Router>
@@ -40,7 +46,7 @@ const App = (props:any) => {
         render={(props:any) => <LandingPage {...props} 
         user={user} 
         registerName={registerName} 
-        onChangeNameInput={onChangeNameInput}  
+        onChangeNameInput={onChangeNameInput}
       />} />
       
       <Route 

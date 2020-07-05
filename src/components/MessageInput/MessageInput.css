@@ -1,0 +1,25 @@
+.messageinput__container {
+  display: flex;
+  background-color: var(--bg-color-dark-3);
+  font-size: 0.7em;
+}
+
+.messageinput__input {
+  border: none;
+  border-radius: 0;
+  padding:1em;
+  width: 80%;
+  font-size: 1.2em;
+}
+
+.messageinput__button {
+  color: var(--text-white);
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #1d6df8;
+  padding: 20px;
+  display: inline-block;
+  border: none;
+  width: 20%;
+}
+

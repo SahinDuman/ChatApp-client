@@ -35,6 +35,11 @@ const chatReducer = (state:ChatState = initialState , action:any) => {
         allMessages: [...state.allMessages, action.payload]
       }
       break;
+    case 'CHAT_CLEAR_ALL_MESSAGES':
+      state = {
+        ...initialState,
+      }
+      break;
   }
   return state;
 }

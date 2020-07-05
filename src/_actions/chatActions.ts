@@ -12,9 +12,14 @@ export const clearCurrentMessage = () => {
 }
 
 export const addMessageToList = (message:string) => {
-  console.log('ADD MESSAGE', message);
   return {
     type: 'CHAT_ADD_MESSAGE_TO_LIST',
     payload: message
+  }
+}
+
+export const clearAllMessages = () => {
+  return {
+    type: 'CHAT_CLEAR_ALL_MESSAGES'
   }
 }

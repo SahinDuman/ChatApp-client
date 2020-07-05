@@ -29,7 +29,6 @@ export const registerName = (name:string) => {
       .then(res => {
       if(res.data.error) {
         dispatch({type: 'USER_ALREADY_EXISTS', payload: res.data.error})
-        alert(res.data.error)
         return;
       } 
       dispatch({type: 'USER_REGISTERED', payload: res.data.name})
