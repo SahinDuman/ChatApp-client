@@ -73,12 +73,14 @@ const ChatRoom = (props:any) => {
     });
 
     socket.on('adminMessage', (adminMessage: any) => {
-      const {user, name, message, role } = adminMessage
-      admin = name;
+      const {user, name, message, role, disconnect } = adminMessage
 
-      console.log('ADMIN', adminMessage)
-      if (user) giveUserId(user.id);
-      addMessageToList({name, message, role})
+      if (user && !user.id) giveUserId(user.id);
+
+      if(!disconnect) {
+        addMessageToList({name, message, role});
+      }
+
     });
 
     socket.on('message', (message: any) => {
@@ -91,6 +93,7 @@ const ChatRoom = (props:any) => {
     socket.on('leave_chat', (message: any) => {
       console.log('LEAVE', message);
       clientDisconnect = true;
+      console.log('LEAVE:::::', clientDisconnect);
       clearAllMessages();
       userLeaveChat(message.message);
     });
@@ -103,10 +106,10 @@ const ChatRoom = (props:any) => {
 
      socket.on('disconnect', (message:any) => {
       console.log('DISCONNECT', message);
-
-      if(!clientDisconnect) {
+      
+      if(!clientDisconnect && message !== 'io client disconnect') {
         userDisconnected('Lost connection');
-        addMessageToList({name: admin, message: `${user.name} left the chat, connection lost`, role: 'admin'})
+        //addMessageToList({name: admin, message: `${user.name} left the chat, connection lost`, role: 'admin'})
       }
     });
 
@@ -131,7 +134,7 @@ const ChatRoom = (props:any) => {
   const submitMessageHandler = (event:any) => {
     event.preventDefault();
     if(socket) {
-      socket.emit('message', { name: user.name, message: chat.currentMessage})
+      socket.emit('message', { name: user.name, chatMessage: chat.currentMessage})
     }
   }
 
