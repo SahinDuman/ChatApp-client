@@ -3,7 +3,7 @@ import './LandingPage.css'
 
 
 const LandingPage = (props:any) => {
-  const {user, registerName, onChangeNameInput, history} = props;
+  const {user, registerName, onChangeNameInput, history, invalidName} = props;
   const [infobox, setInfobox] = useState('');
 
   useEffect(() => {
@@ -20,9 +20,15 @@ const LandingPage = (props:any) => {
   
   const handleSubmit = (event:any)=> {
     event.preventDefault();
-    if(user.name.trim()) {
-      registerName(user.name)
+    const regex = /^([A-Za-z0-9 _-]+)*$/gi;
+    const validName = regex.test(user.name);
+
+    if(validName) {
+      registerName(user.name);
+      return;
     }
+
+    invalidName('Invalid nickname, can only contain letters, numbers and " _-"')
   }
 
 

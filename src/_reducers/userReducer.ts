@@ -40,6 +40,14 @@ const userReducer = (state:User = initialState , action:any) => {
         enteredChat: false
       }
       break;
+    case 'USER_INVALID_NAME':
+      state = {
+        ...state,
+        infoBox: action.payload,
+        infoBoxClass: 'red',
+        enteredChat: false
+      }
+      break;
     case 'USER_ADD_ID':
       state = {
         ...state,

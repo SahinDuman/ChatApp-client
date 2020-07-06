@@ -49,4 +49,10 @@ export const registerName = (name:string) => {
   };
 };
 
+export const invalidName = (value:string) => {
+  return {
+    type: 'USER_INVALID_NAME',
+    payload: value
+  }
+}
 

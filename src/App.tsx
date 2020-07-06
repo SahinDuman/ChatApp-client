@@ -2,7 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import {connect} from 'react-redux'
 
-import { registerName, onChangeNameInput, giveUserId, userLeaveChat, userDisconnected } from './_actions/userActions';
+import { 
+  registerName, 
+  onChangeNameInput, 
+  giveUserId, 
+  userLeaveChat, 
+  userDisconnected, 
+  invalidName 
+} from './_actions/userActions';
+
 import LandingPage from './containers/LandingPage/LandingPage';
 import ChatRoom from './containers/ChatRoom/ChatRoom';
 
@@ -29,6 +37,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     userDisconnected: (reason:string) => {
       dispatch(userDisconnected(reason))
+    },
+    invalidName: (value: string) => {
+      dispatch(invalidName(value))
     }
   }
 }
@@ -40,7 +51,8 @@ const App = (props:any) => {
     onChangeNameInput, 
     giveUserId, 
     userLeaveChat,
-    userDisconnected
+    userDisconnected,
+    invalidName
   } = props;
   
   return (
@@ -51,6 +63,7 @@ const App = (props:any) => {
         user={user} 
         registerName={registerName} 
         onChangeNameInput={onChangeNameInput}
+        invalidName={invalidName}
       />} />
       
       <Route 
