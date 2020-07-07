@@ -1,4 +1,8 @@
 # Chat app Client with Socket.io, Typescript, React and Redux
+![](public/img/narniaChatD1.png)
+![](public/img/narniaChatD2.png)
+![](public/img/narniaChatM1.png)
+![](public/img/narniaChatM1.png)
 
 Dont forget to run "npm install" if you clone this repo! 
 
@@ -21,3 +25,4 @@ Todos:
 * Light theme, to toggle
 * Add avatars that users can pick. 
 * Emoji support
+
