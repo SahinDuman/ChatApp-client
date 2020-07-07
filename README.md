@@ -1,10 +1,15 @@
 # Chat app Client with Socket.io, Typescript, React and Redux
+ ## https://elastic-hoover-0b3086.netlify.app/
+
 <img src="public/img/narniaChatD1.png" width="400" title="mobile landing page">
+
 <img src="public/img/narniaChatD2.png" width="400" title="mobile landing page">
+
 <img src="public/img/narniaChatM1.png" width="250" title="mobile landing page">
+
 <img src="public/img/narniaChatM2.png" width="250" title="mobile landing page">
 
-
+_____________________________________________________________________________
 Dont forget to run "npm install" if you clone this repo! 
 
 ### Run the app
