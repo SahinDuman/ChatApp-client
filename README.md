@@ -1,8 +1,9 @@
 # Chat app Client with Socket.io, Typescript, React and Redux
 ![](public/img/narniaChatD1.png)
 ![](public/img/narniaChatD2.png)
-![](public/img/narniaChatM1.png)
-![](public/img/narniaChatM1.png)
+<img src="public/img/narniaChatM1.png" width="200" title="mobile landing page">
+<img src="public/img/narniaChatM2.png" width="200" title="mobile landing page">
+
 
 Dont forget to run "npm install" if you clone this repo! 
 

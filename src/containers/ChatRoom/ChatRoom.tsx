@@ -53,7 +53,7 @@ const ChatRoom = (props: any) => {
   let clientDisconnect: boolean = false;
 
   //if enteredChat is false, should be redirected to landingpage "./"
-  useEffect(() => { if (!user.enteredChat) history.push('/') }, [user.enteredChat]);
+  useEffect(() => { if (!user.enteredChat) history.push('/') }, [user.enteredChat, history]);
 
   useEffect(() => {
     //turns on client side socket if user got validated
