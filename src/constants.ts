@@ -1,1 +1,1 @@
-export const ENDPOINT:string = 'http://localhost:5000/';
+export const ENDPOINT:string = process.env.ENDPOINT || 'http://localhost:5000/';
