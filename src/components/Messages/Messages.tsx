@@ -6,6 +6,7 @@ const Messages = (props:any) => {
   const {messages} = props;
   const scrollTarget = React.createRef<HTMLDivElement>();
   
+  //auto scrolls to bottom when new message is recieved (By targeting a dummy div with a ref in the bottomg)
   const scrollToBottom = () => {
     const node: HTMLDivElement | null = scrollTarget.current; 
     

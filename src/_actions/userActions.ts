@@ -1,6 +1,7 @@
 import { ENDPOINT } from "../constants";
 import Axios from "axios";
 
+// updates name state and nickname input value
 export const onChangeNameInput = (name:string) => {
   return {
     type: 'UPDATE_NAME_INPUT',
@@ -8,6 +9,7 @@ export const onChangeNameInput = (name:string) => {
   }
 }
 
+//gives user socket id
 export const giveUserId = (id:string) => {
   return {
     type: 'USER_ADD_ID',
@@ -15,6 +17,7 @@ export const giveUserId = (id:string) => {
   }
 }
 
+//sets infobox with right info
 export const userLeaveChat = (reason:string) => {
   if(reason) {
     return {
@@ -24,6 +27,7 @@ export const userLeaveChat = (reason:string) => {
   }
 }
 
+//sets infobox with right info
 export const userDisconnected = (reason:string) => {
   if(reason) {
     return {
@@ -33,7 +37,7 @@ export const userDisconnected = (reason:string) => {
   }
 }
 
-
+//sends a post request to the server, to register name/user
 export const registerName = (name:string) => {
   return  (dispatch: (arg0: { type: string; payload: any; }) => void) => {
     Axios
@@ -49,6 +53,7 @@ export const registerName = (name:string) => {
   };
 };
 
+//sets infobox with right info
 export const invalidName = (value:string) => {
   return {
     type: 'USER_INVALID_NAME',

@@ -56,65 +56,55 @@ const ChatRoom = (props: any) => {
 
   let clientDisconnect: boolean = false;
 
-  let disconnectBotMessage: string = '';
-  let disconnectUserInfo: string | null = null;
-
-
+  //if enteredChat is false, should be redirected to landingpage "./"
   useEffect(() => { if (!user.enteredChat) history.push('/') }, [user.enteredChat]);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    //turns on client side socket if user got validated
+    if (user.enteredChat) {
+    socket = io(ENDPOINT); 
 
-    if(user.enteredChat) {
-      socket.emit('entered_chat', { user }, (error: any) => {
-        if (error) {
-          alert(error);
-          return;
-        }
-      });
-  
+      socket.emit('entered_chat', { user });
+
+      // triggers everything needed when recieving message from bot/server
       socket.on('adminMessage', (adminMessage: any) => {
         const { user, name, message, role, disconnect } = adminMessage
-  
+
         if (user && !user.id) giveUserId(user.id);
-  
+
         if (!disconnect) {
           addMessageToList({ name, message, role });
         }
-  
       });
-  
+
+      //triggers everything needed when message is recieved
       socket.on('message', (message: any) => {
-        console.log('message:::', message);
         addMessageToList(message)
         if (message.name === user.name) clearCurrentMessage();
       });
-  
-  
+
+      //triggers everything needed when user leaves chat
       socket.on('leave_chat', (message: any) => {
-        console.log('LEAVE', message);
         clientDisconnect = true;
-        console.log('LEAVE:::::', clientDisconnect);
         clearAllMessages();
         userLeaveChat(message.message);
       });
-  
+
+      //triggers everything needed when user has been inactive for too long(configurable timelimit on serverside)
       socket.on('inactive', (message: any) => {
-        console.log('INACTIVE', message);
         clientDisconnect = true;
         userDisconnected(message.message);
       });
-  
+
+      //triggers everything needed when serverside disconnect is recieved
       socket.on('disconnect', (message: any) => {
-        console.log('DISCONNECT', message);
-  
         if (!clientDisconnect && message !== 'io client disconnect') {
           userDisconnected('Lost connection');
-          //addMessageToList({name: admin, message: `${user.name} left the chat, connection lost`, role: 'admin'})
         }
       });
     }
 
+    //cleanup when component gets unmounted, closing the socket connection and clear all messages in clients state.
     return (() => {
       socket.close();
       clearAllMessages();
@@ -122,16 +112,8 @@ const ChatRoom = (props: any) => {
   }, []);
 
 
-  const onClickDisconnectHandler = (event: any) => {
-    if (socket) {
-      socket.emit('leave_chat', { user }, (error: any) => {
-        if (error) {
-          alert(error);
-          return;
-        }
-      });
-    }
-  }
+  //Emits "leave_chat" so the server can handle removing the user. 
+  const onClickDisconnectHandler = () => socket.emit('leave_chat', { user });
 
   //true if only whitespace, otherwhise false
   const IsNullOrWhitespace = (string: string): boolean => {
@@ -139,6 +121,7 @@ const ChatRoom = (props: any) => {
     return !/\S/g.test(string);
   }
 
+  //Submits/emits message to server
   const submitMessageHandler = (event: any) => {
     event.preventDefault();
     if (socket && !IsNullOrWhitespace(chat.currentMessage)) {

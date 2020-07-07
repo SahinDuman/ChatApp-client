@@ -6,6 +6,7 @@ const LandingPage = (props: any) => {
   const { user, registerName, onChangeNameInput, history, invalidName } = props;
   const [infobox, setInfobox] = useState('');
 
+  //if user.infoBox true, display it on the page. 
   useEffect(() => {
     if (user.infoBox) {
       setInfobox(user.infoBox)
@@ -14,21 +15,22 @@ const LandingPage = (props: any) => {
     }
   }, [user.infoBox])
 
+  //if enteredChat is true, should be redirected to /chat
   useEffect(() => {
     if (user.enteredChat) history.push('/chat')
   }, [user.enteredChat, history])
 
+  // send username to server to be registered if it goes through the validation. 
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const regex = /^([A-Za-z0-9 _-]+)*$/gi;
     const validName = regex.test(user.name);
 
-    if (validName) {
-      registerName(user.name);
+    if (!validName) {
+      invalidName('Invalid nickname, can only contain letters, numbers and " _-"')
       return;
     }
-
-    invalidName('Invalid nickname, can only contain letters, numbers and " _-"')
+    registerName(user.name);
   }
 
 
@@ -64,8 +66,6 @@ const LandingPage = (props: any) => {
             Enter chat
           </button>
         </div>
-
-
       </div>
     </div>
   );
