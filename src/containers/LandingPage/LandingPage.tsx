@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './LandingPage.css'
 
 
-const LandingPage = (props:any) => {
-  const {user, registerName, onChangeNameInput, history, invalidName} = props;
+const LandingPage = (props: any) => {
+  const { user, registerName, onChangeNameInput, history, invalidName } = props;
   const [infobox, setInfobox] = useState('');
 
   useEffect(() => {
-    if(user.infoBox) {
+    if (user.infoBox) {
       setInfobox(user.infoBox)
     } else {
       setInfobox('')
@@ -15,15 +15,15 @@ const LandingPage = (props:any) => {
   }, [user.infoBox])
 
   useEffect(() => {
-    if(user.enteredChat) history.push('/chat')
+    if (user.enteredChat) history.push('/chat')
   }, [user.enteredChat, history])
-  
-  const handleSubmit = (event:any)=> {
+
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     const regex = /^([A-Za-z0-9 _-]+)*$/gi;
     const validName = regex.test(user.name);
 
-    if(validName) {
+    if (validName) {
       registerName(user.name);
       return;
     }
@@ -38,22 +38,26 @@ const LandingPage = (props:any) => {
         <div>
           <h1 className="landingpage__header">Narnia Chatroom</h1>
           <p className="landingpage__p">
-            Hi fellow chatter, welcome to the chatroom of Narnia!
+            Chat about Narnia related stuff here! Or other things, no worries.
           </p>
 
         </div>
+        <div className={user.infoBoxClass}>
+          <p>{infobox}</p>
+        </div>
+
         <div>
           <label className="label landingpage__label">Enter a nickname below</label>
           <input
             className="input landingpage__input"
-            type="text" 
-            placeholder="Enter nickname..." 
+            type="text"
+            placeholder="Enter nickname..."
             value={user.name}
             onKeyPress={event => event.key === 'Enter' && handleSubmit(event)}
             onChange={event => onChangeNameInput(event.target.value)}
           />
-          <button 
-            onClick={(event) => handleSubmit(event)} 
+          <button
+            onClick={(event) => handleSubmit(event)}
             type="submit"
             className="button landingpage__button"
           >
@@ -61,9 +65,7 @@ const LandingPage = (props:any) => {
           </button>
         </div>
 
-        <div className={user.infoBoxClass}>
-          <p>{infobox}</p>
-        </div>
+
       </div>
     </div>
   );

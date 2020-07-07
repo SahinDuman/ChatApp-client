@@ -7,11 +7,12 @@
 .landingpage__inner-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   text-align: center;
   align-items: center;
   padding: 1rem;
   height: 90%;
+  max-width: 450px;
 }
 
 .landingpage__inner-container div {
@@ -21,6 +22,11 @@
 .landingpage__header {
   margin-bottom: 1em;
   font-weight: bold;
+}
+
+.landingpage__p {
+  opacity: 0.6;
+  font-size: 0.9em;
 }
 
 .landingpage__label {
@@ -44,7 +50,3 @@
   background-color: var(--main-app-color);
 }
 
-.landingpage__infobox {
-  background-color: red;
-  color: var(--red);
-}
