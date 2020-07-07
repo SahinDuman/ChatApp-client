@@ -50,10 +50,6 @@ const ChatRoom = (props: any) => {
     clearAllMessages
   } = props;
 
-  let admin = {
-    name: '',
-  };
-
   let clientDisconnect: boolean = false;
 
   //if enteredChat is false, should be redirected to landingpage "./"
