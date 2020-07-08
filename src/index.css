@@ -73,6 +73,10 @@ button {
   color: var(--red);
 }
 
+.app-color {
+  color: var(--main-app-color);
+}
+
 .white {
   color: var(--text-white)
 }

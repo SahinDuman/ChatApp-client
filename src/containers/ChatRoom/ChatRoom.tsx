@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { connect } from 'react-redux'
 
-import { onChangeMessageInput, clearCurrentMessage, addMessageToList, clearAllMessages } from '../../_actions/chatActions';
+import { onChangeMessageInput, clearCurrentMessage, addMessageToList, clearAllMessages, adminMessageToList } from '../../_actions/chatActions';
 import { ENDPOINT } from '../../constants';
 
 import ChatHeader from "../../components/ChatHeader/ChatHeader";
 import Messages from "../../components/Messages/Messages";
 import MessageInput from "../../components/MessageInput/MessageInput";
 import './ChatRoom.css';
+import { Message, User } from "../../models";
+import SideBar from "../../components/SideBar/SideBar";
 
 
 const mapStateToProps = (state: { chat: any; }) => {
@@ -17,7 +19,7 @@ const mapStateToProps = (state: { chat: any; }) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: (arg0: { type: string; payload?: any; }) => void) => {
   return {
     onChangeMessageInput: (message: string) => {
       dispatch(onChangeMessageInput(message))
@@ -27,6 +29,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     addMessageToList: (message: any) => {
       dispatch(addMessageToList(message))
+    },
+    adminMessageToList: (message: Message, users: User[]) => {
+      dispatch(adminMessageToList(message, users))
     },
     clearAllMessages: () => {
       dispatch(clearAllMessages());
@@ -46,11 +51,13 @@ const ChatRoom = (props: any) => {
     history,
     onChangeMessageInput,
     addMessageToList,
+    adminMessageToList,
     clearCurrentMessage,
     clearAllMessages
   } = props;
 
   let clientDisconnect: boolean = false;
+  const [navOpen, setNavOpen] = useState(false);
 
   //if enteredChat is false, should be redirected to landingpage "./"
   useEffect(() => { if (!user.enteredChat) history.push('/') }, [user.enteredChat, history]);
@@ -64,12 +71,12 @@ const ChatRoom = (props: any) => {
 
       // triggers everything needed when recieving message from bot/server
       socket.on('adminMessage', (adminMessage: any) => {
-        const { user, name, message, role, disconnect } = adminMessage
+        const { user, name, message, role, disconnect, users } = adminMessage
 
         if (user && !user.id) giveUserId(user.id);
 
         if (!disconnect) {
-          addMessageToList({ name, message, role });
+          adminMessageToList({ name, message, role }, users);
         }
       });
 
@@ -102,7 +109,7 @@ const ChatRoom = (props: any) => {
 
     //cleanup when component gets unmounted, closing the socket connection and clear all messages in clients state.
     return (() => {
-      socket.close();
+      if(socket) socket.close();
       clearAllMessages();
     });
   }, []);
@@ -126,21 +133,34 @@ const ChatRoom = (props: any) => {
   }
 
   return (
-    <div className="chatroom__container">
-      <ChatHeader
-        name={user.name}
-        room="Narnia Chat"
-        onClickDisconnectHandler={onClickDisconnectHandler}
-      />
+    <div className="chatroom__outer-container">
 
-      <Messages messages={chat.allMessages} />
+      <div className="chatroom__container">
+        <ChatHeader
+          setNavOpen={setNavOpen}
+          navOpen={navOpen}
+          name={user.name}
+          room="Narnia Chat"
+        />
 
-      <MessageInput
-        chat={chat}
-        onChangeMessageInput={onChangeMessageInput}
-        submitMessageHandler={submitMessageHandler}
+        <Messages messages={chat.allMessages} />
+
+        <MessageInput
+          chat={chat}
+          onChangeMessageInput={onChangeMessageInput}
+          submitMessageHandler={submitMessageHandler}
+        />
+      </div>
+
+      <SideBar 
+      setNavOpen={setNavOpen} 
+      navOpen={navOpen}
+      onClickDisconnectHandler={onClickDisconnectHandler}
+      users={chat.allUsers}
+      name={user.name}
       />
     </div>
+
   );
 }
 

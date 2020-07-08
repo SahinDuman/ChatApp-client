@@ -1,3 +1,5 @@
+import { Message, User } from '../models';
+
 //update currentMessage state and  input value
 export const onChangeMessageInput = (message:string) => {
   return {
@@ -14,10 +16,17 @@ export const clearCurrentMessage = () => {
 }
 
 // adds message Obj to messages list
-export const addMessageToList = (message:string) => {
+export const addMessageToList = (message:Message) => {
   return {
-    type: 'CHAT_ADD_MESSAGE_TO_LIST',
+    type: 'CHAT_MESSAGE',
     payload: message
+  }
+}
+
+export const adminMessageToList = (message:Message, users: User[]) => {
+  return {
+    type: 'CHAT_ADMIN_MESSAGE',
+    payload: {message, users}
   }
 }
 

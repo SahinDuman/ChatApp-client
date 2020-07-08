@@ -1,18 +1,9 @@
-interface Message {
-  user: string,
-  message: string,
-  role: string,
-}
+import { ChatState } from "../models";
 
-interface ChatState {
-  currentMessage:string,
-  allMessages: Message[]
-}
-
- 
 const initialState:ChatState = {
   currentMessage: '',
-  allMessages: []
+  allMessages: [],
+  allUsers: []
 }
 
 const chatReducer = (state:ChatState = initialState , action:any) => {
@@ -29,10 +20,17 @@ const chatReducer = (state:ChatState = initialState , action:any) => {
         currentMessage: '',
       }
       break;
-    case 'CHAT_ADD_MESSAGE_TO_LIST':
+    case 'CHAT_MESSAGE':
       state = {
         ...state,
         allMessages: [...state.allMessages, action.payload]
+      }
+      break;
+    case 'CHAT_ADMIN_MESSAGE':
+      state = {
+        ...state,
+        allMessages: [...state.allMessages, action.payload.message],
+        allUsers: [...action.payload.users]
       }
       break;
     case 'CHAT_CLEAR_ALL_MESSAGES':

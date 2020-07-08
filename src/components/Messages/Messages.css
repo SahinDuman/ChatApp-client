@@ -1,4 +1,11 @@
 .messages__container {
   flex: 1;
-  overflow: auto; 
+  overflow: auto;
+  -ms-overflow-style:none;
+}
+
+.messages__container::-webkit-scrollbar {
+  display: none;
+  visibility: hidden;
+  width: 0;
 }
