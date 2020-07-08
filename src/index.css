@@ -57,6 +57,10 @@ input::placeholder {
   opacity: 0.6;
 }
 
+select, input, textarea {
+  font-size: 16px;
+}
+
 button {
   padding: 1em;
   border: none;

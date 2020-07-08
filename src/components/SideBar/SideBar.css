@@ -69,8 +69,9 @@
 }
 
 .sidebar__user {
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
   padding-bottom: 0.5em;
+  font-weight: bolder;
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 

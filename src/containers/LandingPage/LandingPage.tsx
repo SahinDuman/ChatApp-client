@@ -26,7 +26,7 @@ const LandingPage = (props: any) => {
     const regex = /^([A-Za-z0-9 _-]+)*$/gi;
     const validName = regex.test(user.name);
 
-    if (!validName) {
+    if (!validName || user.name.trim() === '' || !user.name.trim()) {
       invalidName('Invalid nickname, can only contain letters, numbers and " _-"')
       return;
     }

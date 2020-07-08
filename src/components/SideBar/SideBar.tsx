@@ -4,7 +4,6 @@ import './SideBar.css';
 const SideBar = (props:any) => {
   const {navOpen, setNavOpen, onClickDisconnectHandler, users, name } = props;
 
-
   return (
     <div className={navOpen ? 'sidebar__container' : 'sidebar__container sidebar__hide'}>
       <div 
@@ -16,7 +15,7 @@ const SideBar = (props:any) => {
       <p className="sidebar__p">Active users</p>
       <ul className="sidebar__user-list">
         {users.map((user:any) => {
-          return <li key={user.id} className={user.name === name ? 'sidenav__user app-color' : 'sidenav__user'}>
+          return <li key={user.id} className={user.name === name ? 'sidebar__user app-color' : 'sidebar__user'}>
             {user.name}
             </li>
         })}

@@ -62,6 +62,10 @@ const ChatRoom = (props: any) => {
   //if enteredChat is false, should be redirected to landingpage "./"
   useEffect(() => { if (!user.enteredChat) history.push('/') }, [user.enteredChat, history]);
 
+  window.addEventListener('beforeunload', () => {
+    window.location.replace('/');
+  });
+
   useEffect(() => {
     //turns on client side socket if user got validated
     if (user.enteredChat) {
@@ -71,13 +75,11 @@ const ChatRoom = (props: any) => {
 
       // triggers everything needed when recieving message from bot/server
       socket.on('adminMessage', (adminMessage: any) => {
-        const { user, name, message, role, disconnect, users } = adminMessage
+        const { user, name, message, role, users } = adminMessage
 
         if (user && !user.id) giveUserId(user.id);
 
-        if (!disconnect) {
           adminMessageToList({ name, message, role }, users);
-        }
       });
 
       //triggers everything needed when message is recieved
@@ -109,11 +111,14 @@ const ChatRoom = (props: any) => {
 
     //cleanup when component gets unmounted, closing the socket connection and clear all messages in clients state.
     return (() => {
-      if(socket) socket.close();
-      clearAllMessages();
+      closeSocket();
     });
   }, []);
 
+  const closeSocket = () => {
+    if(socket) socket.close();
+    clearAllMessages();
+  }
 
   //Emits "leave_chat" so the server can handle removing the user. 
   const onClickDisconnectHandler = () => socket.emit('leave_chat', { user });
