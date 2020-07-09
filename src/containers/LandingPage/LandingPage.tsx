@@ -25,11 +25,13 @@ const LandingPage = (props: any) => {
     event.preventDefault();
     const regex = /^([A-Za-z0-9 _-]+)*$/gi;
     const validName = regex.test(user.name);
+    const validLength = user.name.trim().length <= 20;
 
-    if (!validName || user.name.trim() === '' || !user.name.trim()) {
-      invalidName('Invalid nickname, can only contain letters, numbers and " _-"')
+    if (!validName || user.name.trim() === '' || !user.name.trim() || !validLength) {
+      invalidName('Nickname can only contain letters, numbers and " _-", between 1-20 characters long.');
       return;
     }
+        
     registerName(user.name);
   }
 
