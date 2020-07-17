@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import './MessageInput.css';
+import { ChatState } from '../../models';
 
-const MessageInput = (props:any) => {
-  const {chat, submitMessageHandler, onChangeMessageInput } = props;
+interface IProps {
+  chat: ChatState,
+  onChangeMessageInput: (message: string) => void,
+  submitMessageHandler: (event: MouseEvent | KeyboardEvent) => void
+}
+
+const MessageInput: React.FC<IProps> = ({chat, submitMessageHandler, onChangeMessageInput }) => {
 
   return (
     <form className="messageinput__container">

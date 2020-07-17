@@ -1,9 +1,8 @@
 import React from 'react';
 import './Message.css';
+import {Message as IMessage } from '../../models';
 
-const Message = (props: any) => {
-  const {name, message, role} = props;
-
+const Message: React.FC<IMessage> = ({name, message, role}) => {
   return (
     <div className={'message__container ' + role}>
       <div className="message__box">

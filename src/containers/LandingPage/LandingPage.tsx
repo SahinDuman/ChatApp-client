@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import './LandingPage.css'
+import React, { useEffect, useState, MouseEvent, KeyboardEvent } from 'react';
+import './LandingPage.css';
+import { User } from '../../models';
+import { RouteComponentProps } from 'react-router-dom';
 
+interface IProps extends RouteComponentProps {
+  user: User,
+  registerName: (name:string) => void,
+  onChangeNameInput: (value:string) => void,
+  invalidName: (value:string) => void,
+}
 
-const LandingPage = (props: any) => {
-  const { user, registerName, onChangeNameInput, history, invalidName } = props;
+const LandingPage: React.FC<IProps> = ({ user, registerName, onChangeNameInput, history, invalidName }) => {
   const [infobox, setInfobox] = useState('');
 
   //if user.infoBox true, display it on the page. 
@@ -21,17 +28,17 @@ const LandingPage = (props: any) => {
   }, [user.enteredChat, history])
 
   // send username to server to be registered if it goes through the validation. 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: MouseEvent | KeyboardEvent) => {
     event.preventDefault();
     const regex = /^([A-Za-z0-9 _-]+)*$/gi;
-    const validName = regex.test(user.name);
-    const validLength = user.name.trim().length <= 20;
+    const validName:boolean = regex.test(user.name);
+    const validLength:boolean = user.name.trim().length <= 20;
 
     if (!validName || user.name.trim() === '' || !user.name.trim() || !validLength) {
       invalidName('Nickname can only contain letters, numbers and " _-", between 1-20 characters long.');
       return;
     }
-        
+
     registerName(user.name);
   }
 

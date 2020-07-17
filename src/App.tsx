@@ -10,18 +10,19 @@ import {
   userDisconnected, 
   invalidName 
 } from './_actions/userActions';
-
+import {UserActionsType} from './_actions/userActionsTypes';
 import LandingPage from './containers/LandingPage/LandingPage';
 import ChatRoom from './containers/ChatRoom/ChatRoom';
+import { User } from './models';
+import { Dispatch } from 'redux';
 
-const mapStateToProps = (state: { user: any, app:any }) => {
+const mapStateToProps = (state: { user: User }) => {
   return {
     user: state.user,
-    app: state.app
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<UserActionsType>) => {
   return {
     giveUserId: (id:string) => {
       dispatch(giveUserId(id))
@@ -44,22 +45,32 @@ const mapDispatchToProps = (dispatch: any) => {
   }
 }
 
-const App = (props:any) => {
-  const {
-    user, 
-    registerName, 
-    onChangeNameInput, 
-    giveUserId, 
-    userLeaveChat,
-    userDisconnected,
-    invalidName
-  } = props;
+
+interface IProps {
+  user: User,
+  registerName: (name:string) => void,
+  onChangeNameInput: (value:string) => void,
+  giveUserId: (id:string) => void,
+  userLeaveChat: (reason:string) => void,
+  userDisconnected: (reason:string) => void,
+  invalidName: (value:string) => void
+}
+
+const App: React.FC<IProps> = ({
+  user, 
+  registerName, 
+  onChangeNameInput, 
+  giveUserId, 
+  userLeaveChat,
+  userDisconnected,
+  invalidName
+}) => {
   
   return (
     <Router>
       <Route 
         path="/" exact 
-        render={(props:any) => <LandingPage {...props} 
+        render={(props) => <LandingPage {...props} 
         user={user} 
         registerName={registerName} 
         onChangeNameInput={onChangeNameInput}
@@ -68,7 +79,7 @@ const App = (props:any) => {
       
       <Route 
         path="/chat" 
-        render={(props:any) => <ChatRoom {...props} 
+        render={(props) => <ChatRoom {...props} 
         user={user} 
         giveUserId={giveUserId}
         userLeaveChat={userLeaveChat}

@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import './ChatHeader.css';
 import HamburgerIcon from '../HamburgerIcon/HamburgerIcon';
 
-const ChatHeader = (props:any) => {
-  const {room, name, setNavOpen, navOpen} = props;
+interface IProps {
+  room: string,
+  name: string,
+  navOpen: boolean,
+  setNavOpen: Dispatch<boolean>
+}
 
+const ChatHeader: React.FC<IProps> = ({room, name, setNavOpen, navOpen}) => {
   return (
     <header className="chatheader__container">
       <h2 className="chatheader__header">{room}, ({name})</h2>

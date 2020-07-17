@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import './HamburgerIcon.css';
 
-const HamburgerIcon = (props:any) => {
+interface IProps {
+  navOpen: boolean,
+  setNavOpen: Dispatch<boolean>
+}
+
+const HamburgerIcon: React.FC<IProps> = (props) => {
 
   const onClick = () => {
     console.log('NAVBAR STATE', props.navOpen);
@@ -15,4 +20,4 @@ const HamburgerIcon = (props:any) => {
   )
 }
 
-export default HamburgerIcon
+export default HamburgerIcon;

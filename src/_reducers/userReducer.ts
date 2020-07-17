@@ -1,38 +1,34 @@
-interface User {
-  name: string,
-  id: string,
-  infoBox: boolean | string,
-  infoBoxClass: string,
-  enteredChat: boolean
-}
+import * as types from '../_actions/userActionsTypes';
+import { User } from '../models';
+
 
 const initialState:User = {
   name: '',
   id:'',
-  infoBox: false,
+  infoBox: '',
   infoBoxClass: 'red', 
   enteredChat: false
 }
 
-const userReducer = (state:User = initialState , action:any) => {
+const userReducer = (state:User = initialState , action: types.UserActionsType): User => {
   switch (action.type) {
-    case 'UPDATE_NAME_INPUT':
+    case types.UPDATE_NAME_INPUT:
       state = {
         ...state,
         name: action.payload,
-        infoBox: false,
+        infoBox: '',
         enteredChat: false
       }
       break;
-    case 'USER_REGISTERED':
+    case types.USER_REGISTERED:
       state = {
         ...state,
         name: action.payload,
-        infoBox: false,
+        infoBox: '',
         enteredChat: true
       }
       break;
-    case 'USER_ALREADY_EXISTS':
+    case types.USER_ALREADY_EXISTS:
       state = {
         ...state,
         infoBox: action.payload,
@@ -40,7 +36,7 @@ const userReducer = (state:User = initialState , action:any) => {
         enteredChat: false
       }
       break;
-    case 'USER_INVALID_NAME':
+    case types.USER_INVALID_NAME:
       state = {
         ...state,
         infoBox: action.payload,
@@ -48,29 +44,22 @@ const userReducer = (state:User = initialState , action:any) => {
         enteredChat: false
       }
       break;
-    case 'USER_ADD_ID':
+    case types.USER_ADD_ID:
       state = {
         ...state,
         id: action.payload,
-        infoBox: false,
+        infoBox: '',
         enteredChat: true
       }
       break;
-      case 'USER_LEAVE_CHAT':
+      case types.USER_LEAVE_CHAT:
         state = {
           ...initialState,
           infoBox: action.payload,
           infoBoxClass: 'white'
         }
         break;
-      case 'USER_DISCONNECTED':
-        state = {
-          ...initialState,
-          infoBox: action.payload,
-          infoBoxClass: 'red'
-        }
-        break;
-      case 'USER_COULD_NOT_CONNECT':
+      case types.USER_DISCONNECTED:
         state = {
           ...initialState,
           infoBox: action.payload,

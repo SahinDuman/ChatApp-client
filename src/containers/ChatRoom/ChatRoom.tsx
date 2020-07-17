@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, MouseEvent } from "react";
 import io from "socket.io-client";
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { Dispatch } from "redux";
 
 import { onChangeMessageInput, clearCurrentMessage, addMessageToList, clearAllMessages, adminMessageToList } from '../../_actions/chatActions';
 import { ENDPOINT } from '../../constants';
+import { ChatActionsTypes } from '../../_actions/chatActionsTypes';
 
 import ChatHeader from "../../components/ChatHeader/ChatHeader";
 import Messages from "../../components/Messages/Messages";
 import MessageInput from "../../components/MessageInput/MessageInput";
 import './ChatRoom.css';
-import { Message, User } from "../../models";
+import { Message, Users, ChatState, User } from "../../models";
 import SideBar from "../../components/SideBar/SideBar";
+import { RouteComponentProps } from "react-router-dom";
 
 
-const mapStateToProps = (state: { chat: any; }) => {
+const mapStateToProps = (state: { chat: ChatState; }) => {
   return {
     chat: state.chat
   }
 }
 
-const mapDispatchToProps = (dispatch: (arg0: { type: string; payload?: any; }) => void) => {
+const mapDispatchToProps = (dispatch: Dispatch<ChatActionsTypes>) => {
   return {
     onChangeMessageInput: (message: string) => {
       dispatch(onChangeMessageInput(message))
@@ -27,10 +30,10 @@ const mapDispatchToProps = (dispatch: (arg0: { type: string; payload?: any; }) =
     clearCurrentMessage: () => {
       dispatch(clearCurrentMessage())
     },
-    addMessageToList: (message: any) => {
+    addMessageToList: (message: Message) => {
       dispatch(addMessageToList(message))
     },
-    adminMessageToList: (message: Message, users: User[]) => {
+    adminMessageToList: (message: Message, users: Users[]) => {
       dispatch(adminMessageToList(message, users))
     },
     clearAllMessages: () => {
@@ -41,22 +44,45 @@ const mapDispatchToProps = (dispatch: (arg0: { type: string; payload?: any; }) =
 
 let socket: SocketIOClient.Socket;
 
-const ChatRoom = (props: any) => {
-  const {
-    user,
-    chat,
-    giveUserId,
-    userLeaveChat,
-    userDisconnected,
-    history,
-    onChangeMessageInput,
-    addMessageToList,
-    adminMessageToList,
-    clearCurrentMessage,
-    clearAllMessages
-  } = props;
+interface IAdminMessage {
+  user: {
+    name: string,
+    id: string
+  },
+  name: string,
+  message: string,
+  users: Users[],
+  role: string
+}
 
-  let clientDisconnect: boolean = false;
+interface IProps extends RouteComponentProps {
+  user: User,
+  chat: ChatState,
+  giveUserId: (id: string) => void,
+  userLeaveChat: (reason: string) => void,
+  userDisconnected: (reason: string) => void,
+  onChangeMessageInput: (message: string) => void,
+  addMessageToList: (message: Message) => void,
+  adminMessageToList: (message: Message, users: Users[]) => void,
+  clearCurrentMessage: () => void,
+  clearAllMessages: () => void
+}
+
+const ChatRoom: React.FC<IProps> = ({
+  user,
+  chat,
+  giveUserId,
+  userLeaveChat,
+  userDisconnected,
+  history,
+  onChangeMessageInput,
+  addMessageToList,
+  adminMessageToList,
+  clearCurrentMessage,
+  clearAllMessages
+}) => {
+
+  const [clientDisconnect, setClientDisconnect] = useState(false)
   const [navOpen, setNavOpen] = useState(false);
 
   //if enteredChat is false, should be redirected to landingpage "./"
@@ -66,40 +92,39 @@ const ChatRoom = (props: any) => {
   useEffect(() => {
     //turns on client side socket if user got validated
     if (user.enteredChat) {
-    socket = io(ENDPOINT); 
+      socket = io(ENDPOINT);
 
       socket.emit('entered_chat', { user });
 
-      // triggers everything needed when recieving message from bot/server
-      socket.on('adminMessage', (adminMessage: any) => {
-        const { user, name, message, role, users } = adminMessage
 
+      // triggers everything needed when recieving message from bot/server
+      socket.on('adminMessage', ({ user, name, message, role, users }: IAdminMessage) => {
         if (user && !user.id) giveUserId(user.id);
 
-          adminMessageToList({ name, message, role }, users);
+        adminMessageToList({ name, message, role }, users);
       });
 
       //triggers everything needed when message is recieved
-      socket.on('message', (message: any) => {
+      socket.on('message', (message: Message) => {
         addMessageToList(message)
         if (message.name === user.name) clearCurrentMessage();
       });
 
       //triggers everything needed when user leaves chat
-      socket.on('leave_chat', (message: any) => {
-        clientDisconnect = true;
+      socket.on('leave_chat', (message: { message: string }) => {
+        setClientDisconnect(true);
         clearAllMessages();
         userLeaveChat(message.message);
       });
 
       //triggers everything needed when user has been inactive for too long(configurable timelimit on serverside)
-      socket.on('inactive', (message: any) => {
-        clientDisconnect = true;
+      socket.on('inactive', (message: { message: string }) => {
+        setClientDisconnect(true);
         userDisconnected(message.message);
       });
 
       //triggers everything needed when serverside disconnect is recieved
-      socket.on('disconnect', (message: any) => {
+      socket.on('disconnect', (message: string) => {
         if (!clientDisconnect && message !== 'io client disconnect') {
           userDisconnected('Lost connection');
         }
@@ -113,7 +138,7 @@ const ChatRoom = (props: any) => {
   }, []);
 
   const closeSocket = () => {
-    if(socket) socket.close();
+    if (socket) socket.close();
     clearAllMessages();
   }
 
@@ -127,7 +152,7 @@ const ChatRoom = (props: any) => {
   }
 
   //Submits/emits message to server
-  const submitMessageHandler = (event: any) => {
+  const submitMessageHandler = (event: MouseEvent | KeyboardEvent) => {
     event.preventDefault();
     if (socket && !IsNullOrWhitespace(chat.currentMessage)) {
       socket.emit('message', { name: user.name, chatMessage: chat.currentMessage })
@@ -154,12 +179,12 @@ const ChatRoom = (props: any) => {
         />
       </div>
 
-      <SideBar 
-      setNavOpen={setNavOpen} 
-      navOpen={navOpen}
-      onClickDisconnectHandler={onClickDisconnectHandler}
-      users={chat.allUsers}
-      name={user.name}
+      <SideBar
+        setNavOpen={setNavOpen}
+        navOpen={navOpen}
+        onClickDisconnectHandler={onClickDisconnectHandler}
+        users={chat.allUsers}
+        name={user.name}
       />
     </div>
 

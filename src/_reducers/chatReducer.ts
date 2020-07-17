@@ -1,4 +1,5 @@
 import { ChatState } from "../models";
+import * as types from "../_actions/chatActionsTypes";
 
 const initialState:ChatState = {
   currentMessage: '',
@@ -6,34 +7,34 @@ const initialState:ChatState = {
   allUsers: []
 }
 
-const chatReducer = (state:ChatState = initialState , action:any) => {
+const chatReducer = (state:ChatState = initialState , action:types.ChatActionsTypes): ChatState => {
   switch (action.type) {
-    case 'UPDATE_MESAGE_INPUT':
+    case types.UPDATE_MESSAGE_INPUT:
       state = {
         ...state,
         currentMessage: action.payload,
       }
       break;
-    case 'CHAT_CLEAR_CURRENT_MESSAGE':
+    case types.CHAT_CLEAR_CURRENT_MESSAGE:
       state = {
         ...state,
         currentMessage: '',
       }
       break;
-    case 'CHAT_MESSAGE':
+    case types.CHAT_MESSAGE:
       state = {
         ...state,
         allMessages: [...state.allMessages, action.payload]
       }
       break;
-    case 'CHAT_ADMIN_MESSAGE':
+    case types.CHAT_ADMIN_MESSAGE:
       state = {
         ...state,
         allMessages: [...state.allMessages, action.payload.message],
         allUsers: [...action.payload.users]
       }
       break;
-    case 'CHAT_CLEAR_ALL_MESSAGES':
+    case types.CHAT_CLEAR_ALL_MESSAGES:
       state = {
         ...initialState,
       }

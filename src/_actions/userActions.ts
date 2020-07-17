@@ -1,63 +1,62 @@
-import { ENDPOINT } from "../constants";
 import Axios from "axios";
 
+import { ENDPOINT } from "../constants";
+import * as types from './userActionsTypes';
+import { Dispatch } from "redux";
+
+
 // updates name state and nickname input value
-export const onChangeNameInput = (name:string) => {
+export const onChangeNameInput = (name:string): types.OnChangeNameInput => {
   return {
-    type: 'UPDATE_NAME_INPUT',
+    type: types.UPDATE_NAME_INPUT,
     payload: name
   }
 }
 
 //gives user socket id
-export const giveUserId = (id:string) => {
+export const giveUserId = (id:string): types.GiveUserId => {
   return {
-    type: 'USER_ADD_ID',
+    type: types.USER_ADD_ID,
     payload: id
   }
 }
 
 //sets infobox with right info
-export const userLeaveChat = (reason:string) => {
-  if(reason) {
+export const userLeaveChat = (reason:string):types.UserLeaveChat => {
     return {
-      type: 'USER_LEAVE_CHAT',
+      type: types.USER_LEAVE_CHAT,
       payload: reason
-    }
   }
 }
 
 //sets infobox with right info
-export const userDisconnected = (reason:string) => {
-  if(reason) {
+export const userDisconnected = (reason:string):types.UserDisconnected => {
     return {
-      type: 'USER_DISCONNECTED',
+      type: types.USER_DISCONNECTED,
       payload: reason
-    }
   }
 }
 
 //sends a post request to the server, to register name/user
-export const registerName = (name:string) => {
-  return  (dispatch: (arg0: { type: string; payload: any; }) => void) => {
+export const registerName = (name:string):any => {
+  return  (dispatch: Dispatch<types.RegisterNameTypes>) => {
     Axios
       .post(ENDPOINT + 'register', {name})
       .then(res => {
       if(res.data.error) {
-        dispatch({type: 'USER_ALREADY_EXISTS', payload: res.data.error})
+        dispatch({type: types.USER_ALREADY_EXISTS, payload: res.data.error})
         return;
       } 
-      dispatch({type: 'USER_REGISTERED', payload: res.data.name})
+      dispatch({type: types.USER_REGISTERED, payload: res.data.name})
       })
-      .catch(err => {dispatch({type:'USER_DISCONNECTED' , payload: 'Sorry, could not connect to server'})})
+      .catch(err => {dispatch({type:types.USER_DISCONNECTED , payload: 'Sorry, could not connect to server'})})
   };
 };
 
 //sets infobox with right info
-export const invalidName = (value:string) => {
+export const invalidName = (value:string): types.InvalidName => {
   return {
-    type: 'USER_INVALID_NAME',
+    type: types.USER_INVALID_NAME,
     payload: value
   }
 }
-

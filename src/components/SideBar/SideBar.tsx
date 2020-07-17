@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import './SideBar.css';
+import { Users } from '../../models';
 
-const SideBar = (props:any) => {
-  const {navOpen, setNavOpen, onClickDisconnectHandler, users, name } = props;
+interface IProps {
+  navOpen: boolean,
+  setNavOpen: Dispatch<boolean>,
+  onClickDisconnectHandler: () => void,
+  users: Users[],
+  name: string
+}
 
+const SideBar: React.FC<IProps> = ({navOpen, setNavOpen, onClickDisconnectHandler, users, name }) => {
   return (
     <div className={navOpen ? 'sidebar__container' : 'sidebar__container sidebar__hide'}>
       <div 
@@ -14,6 +21,7 @@ const SideBar = (props:any) => {
       <hr className="sidebar__hr" />
       <p className="sidebar__p">Active users</p>
       <ul className="sidebar__user-list">
+
         {users.map((user:any) => {
           return <li key={user.id} className={user.name === name ? 'sidebar__user app-color' : 'sidebar__user'}>
             {user.name}
