@@ -1,7 +1,6 @@
 import * as types from '../_actions/userActionsTypes';
 import { User } from '../models';
 
-
 const initialState:User = {
   name: '',
   id:'',
@@ -30,18 +29,14 @@ const userReducer = (state:User = initialState , action: types.UserActionsType):
       break;
     case types.USER_ALREADY_EXISTS:
       state = {
-        ...state,
+        ...initialState,
         infoBox: action.payload,
-        infoBoxClass: 'red',
-        enteredChat: false
       }
       break;
     case types.USER_INVALID_NAME:
       state = {
-        ...state,
+        ...initialState,
         infoBox: action.payload,
-        infoBoxClass: 'red',
-        enteredChat: false
       }
       break;
     case types.USER_ADD_ID:
@@ -63,7 +58,6 @@ const userReducer = (state:User = initialState , action: types.UserActionsType):
         state = {
           ...initialState,
           infoBox: action.payload,
-          infoBoxClass: 'red'
         }
         break;
   }
