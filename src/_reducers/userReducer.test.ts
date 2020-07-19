@@ -158,4 +158,13 @@ describe('User reducer testing', () => {
       infoBox: 'Invalid name'
     })
   })
-})
+
+  test('type action that doesnt exist to return same state as before', () => {
+    mockAction = {type: 'THIS_ACTION_DOESNT_EXIST'}
+
+    mockState = {...mockStateEx1}
+
+    state = userReducer(mockState, mockAction);
+
+    expect(state).toEqual(mockState);
+  })})

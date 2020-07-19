@@ -146,6 +146,17 @@ describe('Chat reducer Testing', () => {
 
     state = chatReducer(mockState, mockAction);
 
-    expect(state).toEqual({...initialState})
+    expect(state).toEqual({...initialState});
+  })
+
+  test('type action that doesnt exist to return same state as before', () => {
+    mockAction = {type: 'THIS_ACTION_DOESNT_EXIST'}
+
+    mockState = {...mockStateEx2}
+
+    state = chatReducer(mockState, mockAction);
+
+    expect(state).toEqual(mockState);
+
   })
 })

@@ -44,14 +44,35 @@ export const registerName = (name: string): any => {
       .post(ENDPOINT + 'register', { name })
       .then(res => {
         if (res.data.error) {
-          dispatch({ type: types.USER_ALREADY_EXISTS, payload: res.data.error })
+          dispatch(registerNameTaken(res.data.error))
           return;
         }
-        dispatch({ type: types.USER_REGISTERED, payload: res.data.name })
+        dispatch(registerNameSuccess(res.data.name))
       })
-      .catch(err => { dispatch({ type: types.USER_DISCONNECTED, payload: 'Sorry, could not connect to server' }) })
+      .catch(err => { dispatch(registerNameFailed('Sorry, could not connect to server')) })
   };
 };
+
+export const registerNameTaken = (reason:string): types.RegisterNameTaken => {
+  return {
+    type: types.USER_ALREADY_EXISTS,
+    payload: reason
+  }
+}
+
+export const registerNameSuccess = (name: string): types.RegisterNameSuccess => {
+  return {
+    type: types.USER_REGISTERED,
+    payload: name
+  }
+}
+
+export const registerNameFailed = (reason: string): types.RegisterNameFailed => {
+  return {
+    type: types.USER_DISCONNECTED,
+    payload: reason
+  }
+}
 
 //sets infobox with right info
 export const invalidName = (value: string): types.InvalidName => {
